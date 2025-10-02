@@ -1,3 +1,10 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "logo",
+      "imageUrl": "https://images.unsplash.com/photo-1646282814550-f521d9b57a59?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjcmlja2V0JTIwYmF0fGVufDB8fHx8MTc1OTQxODczOHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Cricket Exchange Logo",
+      "imageHint": "cricket bat"
+    }
+  ]
 }
