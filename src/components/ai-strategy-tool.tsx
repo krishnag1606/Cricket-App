@@ -3,14 +3,15 @@
 import * as React from "react";
 import { useMatch } from "@/hooks/use-match";
 import { suggestProfitableTrades, explainAiSuggestions } from "@/ai/flows";
-import type { SuggestProfitableTradesOutput, ExplainAiSuggestionsOutput } from "@/ai/flows";
+import type { SuggestProfitableTradesOutput } from "@/ai/flows/suggest-profitable-trades";
+import type { ExplainAiSuggestionsOutput } from "@/ai/flows/explain-ai-suggestions";
 import type { MarketId } from "@/lib/types";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
-import { Button } from "./ui/button";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./ui/accordion";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Loader2, Lightbulb, AlertTriangle } from "lucide-react";
-import { Badge } from "./ui/badge";
-import { Separator } from "./ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 
 export function AiStrategyTool({ marketId }: { marketId: MarketId }) {
@@ -93,7 +94,7 @@ export function AiStrategyTool({ marketId }: { marketId: MarketId }) {
         marketId: suggestion.market as MarketId,
         price: suggestion.price,
         volume: suggestion.volume,
-        side: suggestion.action
+        side: suggestion.action === 'BUY' ? 'BUY' : 'SELL'
      });
      toast({
         title: "Order Pre-filled",
