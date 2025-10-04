@@ -10,6 +10,12 @@ export type Market = {
   maxPrice: number;
 };
 
+export interface BallHistoryItem {
+  ballNumber: number;
+  outcome: 'dot' | 'single' | 'double' | 'triple' | 'four' | 'six' | 'wicket' | 'wide' | 'noBall';
+  timestamp: number;
+}
+
 export type Order = {
   id: string;
   userId: string;

@@ -9,6 +9,7 @@ import { GameStateCard } from "./dashboard/game-state-card";
 import { MarketCard } from "./dashboard/market-card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Lightbulb } from "lucide-react";
+import { BallHistoryCard } from "./dashboard/ball-history-card";
 
 export function DashboardClient() {
   const { matchStatus, startGame, resetMatch } = useMatch();
@@ -41,23 +42,24 @@ export function DashboardClient() {
           </AlertDescription>
         </Alert>
       
-      <div className="flex flex-col md:flex-row gap-6">
-        <GameStateCard />
+        <div className="flex flex-col md:flex-row gap-6">
+                <GameStateCard />
+                <BallHistoryCard />
+        </div>
         <Card className="flex-1">
-          <CardHeader>
+        <CardHeader>
             <CardTitle>Match Controls</CardTitle>
             <CardDescription>Manage the simulation</CardDescription>
-          </CardHeader>
-          <CardContent>
+        </CardHeader>
+        <CardContent>
             <div className="flex gap-4">
               <Button onClick={resetMatch} variant="destructive">Reset Match</Button>
             </div>
              {matchStatus === 'finished' && (
                 <p className="text-lg font-bold text-primary mt-4">Match Finished!</p>
             )}
-          </CardContent>
-        </Card>
-      </div>
+        </CardContent>
+      </Card>
       
       <div>
         <h2 className="text-2xl font-bold mb-4">Markets</h2>
@@ -67,6 +69,7 @@ export function DashboardClient() {
           ))}
         </div>
       </div>
+      
     </div>
   );
 }

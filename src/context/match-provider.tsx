@@ -19,6 +19,7 @@ interface MatchState {
   pnl: PnL;
   positions: Position;
   orderForm: { marketId: MarketId, price: number, side?: OrderSide } | null;
+  ballHistory: BallHistoryItem[];  // ADD THIS LINE
 }
 
 // Actions
@@ -38,6 +39,7 @@ interface MatchContextProps extends MatchState {
   placeOrder: (order: { marketId: MarketId; side: OrderSide; price: number; volume: number }) => void;
   updateSettings: (settings: SimulationSettings) => void;
   setOrderForm: (payload: { marketId: MarketId, price: number, side?: OrderSide } | null) => void;
+  ballHistory: BallHistoryItem[];  // ADD THIS LINE
 }
 
 export const MatchContext = createContext<MatchContextProps | undefined>(undefined);
@@ -71,7 +73,8 @@ const initialAppState: MatchState = {
   trades: initialTrades,
   pnl: initialPnl,
   positions: initialPositions,
-  orderForm: null
+  orderForm: null,
+  ballHistory: []  // ADD THIS LINE
 };
 
 function matchReducer(state: MatchState, action: Action): MatchState {
@@ -81,20 +84,29 @@ function matchReducer(state: MatchState, action: Action): MatchState {
     case 'RESET_MATCH':
       return {
         ...initialAppState,
-        settings: state.settings, // Keep user settings
-        matchStatus: 'not_started'
+        settings: state.settings,
+        matchStatus: 'not_started',
+        ballHistory: []  // ADD THIS LINE
       };
     case 'SIMULATE_BALL': {
-        if (state.matchStatus !== 'in_progress') return state;
-        const outcome = simulateBallOutcome(state.settings.probabilities);
-        const newGameState = updateGameState(state.gameState, outcome);
-        
-        let matchStatus = state.matchStatus;
-        if (newGameState.over >= OVERS_PER_MATCH) {
-            matchStatus = 'finished';
-        }
-
-        return { ...state, gameState: newGameState, matchStatus };
+      if (state.matchStatus !== 'in_progress') return state;
+      const outcome = simulateBallOutcome(state.settings.probabilities);
+      const newGameState = updateGameState(state.gameState, outcome);
+      
+      // ADD THESE LINES:
+      const newBallHistory = [...state.ballHistory, {
+          ballNumber: newGameState.ball,
+          outcome: outcome,
+          timestamp: Date.now()
+      }].slice(-30); // Keep last 30 balls
+      
+      let matchStatus = state.matchStatus;
+      if (newGameState.over >= OVERS_PER_MATCH) {
+          matchStatus = 'finished';
+      }
+  
+      // UPDATE THIS LINE to include ballHistory:
+      return { ...state, gameState: newGameState, matchStatus, ballHistory: newBallHistory };
     }
     case 'PLACE_ORDER': {
       const { marketId, side, price, volume } = action.payload;
